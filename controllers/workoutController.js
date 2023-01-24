@@ -62,9 +62,14 @@ const updateWorkout = async (req, res) => {
     return res.status(404).json({ message: 'No such workouts' })
   }
 
-  const workout = await Workout.findOneAndUpdate({ _id: id }, {
-    title: 'abc'
-  })
+  const workout = await Workout.findOneAndUpdate({ _id: id }, req.body, { new: true })
+  /* { new: true } -> If this is not provided then older document will be sent as a responseb */
+
+  if (!workout) {
+    return res.status(400).json({ message: 'No Such Workout' })
+  }
+
+  res.status(200).json(workout)
 }
 
 
