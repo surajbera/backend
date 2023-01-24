@@ -1,8 +1,18 @@
 const express = require('express')
+const Workout = require('../models/WorkoutModel')
 const router = express.Router()
 
 // POST a new workout
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+  const { title, reps, load } = req.body
+
+  try {
+    const workout = await Workout.create({ title, reps, load }) /* creates a new document along with an id */
+    res.status(201).json(workout)
+  } catch ({ message }) {
+    res.status(400).json({ message })
+  }
+
   res.json({ msg: 'POST a new workout' })
 })
 

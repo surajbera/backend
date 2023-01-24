@@ -16,7 +16,7 @@ const workoutSchema = new Schema({
     required: true
   }
 }, {
-  timestamps: true /* automatically adds a createdAt property for the document  */
+  timestamps: true /* automatically adds a createdAt and updatedAt property to the document  */
 })
 
 module.exports = mongoose.model('Workout', workoutSchema)
