@@ -52,18 +52,47 @@ const getWorkout = async (req, res) => {
 
 /**
  * @desc UPDATE a workout
- * @route PUT /api/workouts/:id
+ * @route PACTH /api/workouts/:id
  * @access private
 */
+const updateWorkout = async (req, res) => {
+  const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: 'No such workouts' })
+  }
+
+  const workout = await Workout.findOneAndUpdate({ _id: id }, {
+    title: 'abc'
+  })
+}
+
+
 
 /**
  * @desc DELETE a workout
  * @route DELETE /api/workouts/:id
  * @access private
 */
+const deleteWorkout = async (req, res) => {
+  const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: 'No such workout' })
+  }
+
+  const workout = await Workout.findByIdAndDelete({ _id: id })
+  if (!workout) {
+    return res.status(404).json({ message: 'No such workout' })
+  }
+
+  res.status(200).json(workout)
+}
 
 module.exports = {
   createWorkout,
   getWorkouts,
-  getWorkout
+  getWorkout,
+  updateWorkout,
+  deleteWorkout
 }
