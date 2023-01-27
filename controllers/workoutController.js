@@ -1,4 +1,4 @@
-const Workout = require('../models/WorkoutModel')
+const Workout = require('../models/workoutModel')
 const mongoose = require('mongoose')
 
 /**
@@ -8,6 +8,16 @@ const mongoose = require('mongoose')
 */
 const createWorkout = async (req, res) => {
   const { title, reps, load } = req.body
+
+  let emptyFields = []
+
+  if (!title) emptyFields.push('title')
+  if (!reps) emptyFields.push('reps')
+  if (!load) emptyFields.push('load')
+
+  if (emptyFields.length > 0) {
+    return res.status(400).json({ message: 'Please fill in all the fields', emptyFields })
+  }
 
   try {
     const workout = await Workout.create({ title, reps, load }) /* creates a new document along with an id */
@@ -23,7 +33,7 @@ const createWorkout = async (req, res) => {
  * @access private
 */
 const getWorkouts = async (req, res) => {
-  const workouts = await Workout.find({}).sort({ createdAt: -1 }) /* -1 indicates descending order */
+  const workouts = await Workout.find({}).sort({ createdAt: -1 }) /* -1 indicates descending order(latest wala workout pehhle dikhega) */
 
   res.status(200).json(workouts)
 }
@@ -69,8 +79,6 @@ const updateWorkout = async (req, res) => {
 
   res.status(200).json(workout)
 }
-
-
 
 /**
  * @desc DELETE a workout
